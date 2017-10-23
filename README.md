@@ -10,15 +10,13 @@ The goals / steps of this project are the following:
 * Estimate a bounding box for vehicles detected.
 
 [//]: # (Image References)
-[image1]: ./examples/car_not_car.png
-[image2]: ./examples/HOG_example.jpg
-[image3]: ./examples/sliding_windows.jpg
-[image4]: ./examples/sliding_window.jpg
-[image5]: ./examples/bboxes_and_heat.png
-[image6]: ./examples/labels_map.png
-[image7]: ./examples/output_bboxes.png
-[video1]: ./project_video.mp4
-
+[image1]: ./output_images/car_not_car.png
+[image2]: ./output_images/hog.png
+[image3]: ./output_images/sliding_windows.png
+[image4]: ./output_images/sliding_windows.png
+[image5]: ./output_images/bboxes_and_heat.png
+[image6]: ./output_images/labels_map.png
+[image7]: ./output_images/output_bboxes.png
 ---
 ### Writeup / README
 
@@ -26,7 +24,7 @@ The goals / steps of this project are the following:
 
 #### 1. Explain how (and identify where in your code) you extracted HOG features from the training images.
 
-The code for this step is contained in the first code cell of the IPython notebook.
+The code for this step is contained in Cell Block 17 of the IPython notebook.
 
 Below is an example of one of each of the `vehicle` and `non-vehicle` classes:
 
@@ -34,29 +32,46 @@ Below is an example of one of each of the `vehicle` and `non-vehicle` classes:
 
 I then explored different color spaces and different `skimage.hog()` parameters (`orientations`, `pixels_per_cell`, and `cells_per_block`).  I grabbed random images from each of the two classes and displayed them to get a feel for what the `skimage.hog()` output looks like.
 
-Here is an example using the `YCrCb` color space and HOG parameters of `orientations=9`, `pixels_per_cell=(8, 8)` and `cells_per_block=(2, 2)`:
+Here is an example using gray scale and HOG parameters of `orientations=9`, `pixels_per_cell=(8, 8)` and `cells_per_block=(2, 2)`:
 
 ![alt text][image2]
 
-####2. Explain how you settled on your final choice of HOG parameters.
+#### 2. Explain how you settled on your final choice of HOG parameters.
 
-I tried various combinations of parameters and...
+I went with the color space (`YCrCb`) that optimized the SVM model. 
 
-####3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
+#### 3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
 
-I trained a linear SVM using...
+See Cell # 9. I trained a linear SVM with default parameters. Final fetures were based on 'spatial, color histogram and HOG features. Following are the parameteres used: 
+
+|Parameter      | Value  |
+|---------------|--------|
+|Color Space    |YCrCb   |
+|Spatial Size   |(32, 32)|
+|Histogram Bins |32      |
+|Histogram Range|(0, 256)|
+|Orient         |9       |
+|Pixel per Cell |8		 |
+|Cell per Block |2       |
+|HOG Channel    |ALL     | 
 
 ###Sliding Window Search
 
-####1. Describe how (and identify where in your code) you implemented a sliding window search.  How did you decide what scales to search and how much to overlap windows?
+#### 1. Describe how (and identify where in your code) you implemented a sliding window search.  How did you decide what scales to search and how much to overlap windows?
 
-I decided to search random window positions at random scales all over the image and came up with this (ok just kidding I didn't actually ;):
+See Cell # 10. I searched various overlapping window poisitons at different y-scale and window scale. Following are the three sets used and combined. This was more trail and error based to see which provided least false positive and duplicates. 
+
+1. ystart = 380, ystop = 480, scale = 1.0
+2. ystart = 400, ystop = 600, scale = 1.5
+3. ystart = 480, ystop = 680, scale = 2.5
+
+Below are my test image results.
 
 ![alt text][image3]
 
 ####2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
 
-Ultimately I searched on two scales using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result.  Here are some example images:
+Ultimately I searched on three scales and three y-range using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result.  Here are some example images:
 
 ![alt text][image4]
 ---
@@ -65,7 +80,8 @@ Ultimately I searched on two scales using YCrCb 3-channel HOG features plus spat
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (somewhat wobbly or unstable bounding boxes are ok as long as you are identifying the vehicles most of the time with minimal false positives.)
 
-Here's a [link to my video result](./project_video.mp4)
+
+[![IMAGE ALT TEXT HERE](./output_images/youtube.jpg)](https://youtu.be/xR4nmaXbZfs)
 
 
 #### 2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
