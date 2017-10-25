@@ -1,4 +1,4 @@
-**Vehicle Detection Project**
+# **Vehicle Detection Project**
 
 The goals / steps of this project are the following:
 
@@ -14,17 +14,14 @@ The goals / steps of this project are the following:
 [image2]: ./output_images/hog.png
 [image3]: ./output_images/sliding_windows.png
 [image4]: ./output_images/sliding_windows.png
-[image5]: ./output_images/bboxes_and_heat.png
-[image6]: ./output_images/labels_map.png
-[image7]: ./output_images/output_bboxes.png
----
+
 ### Writeup / README
 
 ### Histogram of Oriented Gradients (HOG)
 
 #### 1. Explain how (and identify where in your code) you extracted HOG features from the training images.
 
-The code for this step is contained in Cell Block 17 of the IPython notebook.
+The code for this step is contained in Cell # 6 of the IPython notebook.
 
 Below is an example of one of each of the `vehicle` and `non-vehicle` classes:
 
@@ -42,7 +39,7 @@ I went with the color space (`YCrCb`) that optimized the SVM model.
 
 #### 3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
 
-See Cell # 9. I trained a linear SVM with default parameters. Final fetures were based on 'spatial, color histogram and HOG features. Following are the parameteres used: 
+See Cell # 8. I trained a linear SVM with default parameters. Final fetures were based on 'spatial, color histogram and HOG features. Following are the parameteres used: 
 
 |Parameter      | Value  |
 |---------------|--------|
@@ -55,11 +52,13 @@ See Cell # 9. I trained a linear SVM with default parameters. Final fetures were
 |Cell per Block |2       |
 |HOG Channel    |ALL     | 
 
+Final and best test accurcy was 98.59%.
+
 ###Sliding Window Search
 
 #### 1. Describe how (and identify where in your code) you implemented a sliding window search.  How did you decide what scales to search and how much to overlap windows?
 
-See Cell # 10. I searched various overlapping window poisitons at different y-scale and window scale. Following are the three sets used and combined. This was more trail and error based to see which provided least false positive and duplicates. 
+See Cell # 9. I searched various overlapping window poisitons at different y-scale and window scale. Following are the three sets used and combined. This was more trail and error based to see which provided least false positive and duplicates. 
 
 1. ystart = 380, ystop = 480, scale = 1.0
 2. ystart = 400, ystop = 600, scale = 1.5
@@ -80,31 +79,33 @@ Ultimately I searched on three scales and three y-range using YCrCb 3-channel HO
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (somewhat wobbly or unstable bounding boxes are ok as long as you are identifying the vehicles most of the time with minimal false positives.)
 
+See Cell # 15 for Video Pipeline.
 
-[![IMAGE ALT TEXT HERE](./output_images/youtube.jpg)](https://youtu.be/xR4nmaXbZfs)
+[![IMAGE ALT TEXT HERE](./output_images/youtube.jpg)](https://youtu.be/671Pn8MFHco)
 
 
 #### 2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
 
-I recorded the positions of positive detections in each frame of the video.  From the positive detections I created a heatmap and then thresholded that map to identify vehicle positions.  I then used `scipy.ndimage.measurements.label()` to identify individual blobs in the heatmap.  I then assumed each blob corresponded to a vehicle.  I constructed bounding boxes to cover the area of each blob detected.  
+See Cell # 12-13, I recorded the positions of positive detections in each frame of the video.  From the positive detections I created a heatmap and then thresholded that map to identify vehicle positions.  I then used `scipy.ndimage.measurements.label()` to identify individual blobs in the heatmap.  I then assumed each blob corresponded to a vehicle.  I constructed bounding boxes to cover the area of each blob detected.  
 
-Here's an example result showing the heatmap from a series of frames of video, the result of `scipy.ndimage.measurements.label()` and the bounding boxes then overlaid on the last frame of video:
+Here's an example result showing the heatmap from a series of frames of video, the result of `scipy.ndimage.measurements.label()` and the bounding boxes then overlaid on the last frame of video. Below are six frames and their corresponding heatmaps, the output of `scipy.ndimage.measurements.label()` on the integrated heatmap from all six frames and the resulting bounding boxes are drawn onto the last frame in the series:
 
-### Here are six frames and their corresponding heatmaps:
-
-![alt text][image5]
-
-### Here is the output of `scipy.ndimage.measurements.label()` on the integrated heatmap from all six frames:
-![alt text][image6]
-
-### Here the resulting bounding boxes are drawn onto the last frame in the series:
-![alt text][image7]
+![alt text](./output_images/test1.png)
+![alt text](./output_images/test2.png)
+![alt text](./output_images/test3.png)
+![alt text](./output_images/test4.png)
+![alt text](./output_images/test5.png)
+![alt text](./output_images/test6.png)
 
 ---
 
-###Discussion
+### Discussion
 
-####1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
+#### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+Over algorithm does a decent job of detecting vehicles with few false positives. However, performs poorly when cars aren't fully visible or too far away, it doesn't detect in those situtaitons. 
+
+Need to try real time automated methods such as YOLO to reduce false positves, without relying on manual thresholding to detect cars and reduce false poisitives. Also will try deep learning implementation to see model accuracy can be imporved to reduce false positives. 
+
+
 
